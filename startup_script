@@ -1,0 +1,20 @@
+#!/bin/bash
+sudo mkdir -p /var/www/html/
+cd /var/www/html/
+sudo apt-get update
+sudo apt-get install python-software-properties
+sudo add-apt-repository ppa:ondrej/php
+sudo apt-get update
+apt-get install nginx php7.0 mysql-server php7.0-fpm php7.0-cli php7.0-common php7.0-json php7.0-opcache php7.0-mysql php7.0-phpdbg php7.0-mbstring php7.0-gd php7.0-imap php7.0-ldap php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-dev php7.0-intl php7.0-gd php7.0-curl php7.0-zip php7.0-xml build-essential libfcgi-dev libfcgi0ldbl libmcrypt-dev libssl-dev libc-client2007e libc-client2007e-dev libxml2-dev libbz2-dev libcurl4-openssl-dev libjpeg-dev libpng12-dev libfreetype6-dev libkrb5-dev libpq-dev composer libxml2-dev libxslt1-dev php-pear pkg-config  redis-server mongodb libpcre3-dev mysql-client git
+sed -i '/fastcgi_pass unix/c\fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;' /etc/nginx/sites-enabled/default
+sudo service nginx restart
+sudo pecl install mongodb
+echo "extension=mongodb.so" >> /etc/php/7.0/fpm/php.ini
+echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
+sudo sed -i '/bind-address/c\bind-address = 0.0.0.0' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+mysql -u root --password=licious
+GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'your-root-password';
+FLUSH PRIVILEGES;
+exit
+
